@@ -92,3 +92,7 @@ inline fun Text.broadcast() = Server.broadcastChannel.send(this)
 inline fun Text.broadcast(type: ChatType) = Server.broadcastChannel.send(this, type)
 
 inline infix fun Text.sendTo(channel: MessageChannel) = channel.send(this)
+
+inline fun Text.toLegacy(): String = TextSerializers.LEGACY_FORMATTING_CODE.serialize(this)
+inline fun Text.toAmpersand(): String = TextSerializers.FORMATTING_CODE.serialize(this)
+inline fun Text.toJson(): String = TextSerializers.JSON.serialize(this)
