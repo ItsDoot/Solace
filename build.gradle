@@ -27,6 +27,8 @@ compileKotlin {
 
 shadowJar {
     configurations = [project.configurations.compile]
+    classifier = "shaded"
+    version = pluginVersion
 
     dependencies {
         include(dependency('org.jetbrains.kotlin:kotlin-stdlib-jdk8'))
