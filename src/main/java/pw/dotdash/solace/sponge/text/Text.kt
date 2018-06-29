@@ -7,6 +7,7 @@ import org.spongepowered.api.text.action.ClickAction
 import org.spongepowered.api.text.action.HoverAction
 import org.spongepowered.api.text.action.ShiftClickAction
 import org.spongepowered.api.text.channel.MessageChannel
+import org.spongepowered.api.text.channel.MessageReceiver
 import org.spongepowered.api.text.chat.ChatType
 import org.spongepowered.api.text.format.TextColor
 import org.spongepowered.api.text.format.TextColors
@@ -46,7 +47,7 @@ inline val Text.underline: Text get() = this.style(TextStyles.UNDERLINE)
 
 inline fun <T : ClickAction<*>> Text.click(action: T): Text = Text.builder().append(this).onClick(action).build()
 inline fun <T : ShiftClickAction<*>> Text.shiftClick(action: T): Text = Text.builder().append(this).onShiftClick(action).build()
-inline fun <T : HoverAction<*>> Text.Hover(action: T): Text = Text.builder().append(this).onHover(action).build()
+inline fun <T : HoverAction<*>> Text.hover(action: T): Text = Text.builder().append(this).onHover(action).build()
 
 inline val String.text: Text get() = Text.of(this)
 
@@ -80,7 +81,7 @@ inline val String.underline: Text get() = this.style(TextStyles.UNDERLINE)
 
 inline fun <T : ClickAction<*>> String.click(action: T): Text = Text.builder(this).onClick(action).build()
 inline fun <T : ShiftClickAction<*>> String.shiftClick(action: T): Text = Text.builder(this).onShiftClick(action).build()
-inline fun <T : HoverAction<*>> String.Hover(action: T): Text = Text.builder(this).onHover(action).build()
+inline fun <T : HoverAction<*>> String.hover(action: T): Text = Text.builder(this).onHover(action).build()
 
 inline fun Text.serialize(serializer: TextSerializer = TextSerializers.FORMATTING_CODE): String =
         serializer.serialize(this)
@@ -92,7 +93,12 @@ inline fun Text.broadcast() = Server.broadcastChannel.send(this)
 inline fun Text.broadcast(type: ChatType) = Server.broadcastChannel.send(this, type)
 
 inline infix fun Text.sendTo(channel: MessageChannel) = channel.send(this)
+inline infix fun Text.sendTo(receiver: MessageReceiver) = receiver.sendMessage(this)
 
 inline fun Text.toLegacy(): String = TextSerializers.LEGACY_FORMATTING_CODE.serialize(this)
 inline fun Text.toAmpersand(): String = TextSerializers.FORMATTING_CODE.serialize(this)
 inline fun Text.toJson(): String = TextSerializers.JSON.serialize(this)
+
+inline fun String.fromLegacy(): Text = TextSerializers.LEGACY_FORMATTING_CODE.deserialize(this)
+inline fun String.fromAmpersand(): Text = TextSerializers.FORMATTING_CODE.deserialize(this)
+inline fun String.fromJson(): Text = TextSerializers.JSON.deserialize(this)

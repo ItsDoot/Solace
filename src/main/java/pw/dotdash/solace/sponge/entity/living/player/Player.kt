@@ -4,10 +4,12 @@ package pw.dotdash.solace.sponge.entity.living.player
 
 import org.spongepowered.api.data.type.HandTypes
 import org.spongepowered.api.entity.living.player.Player
+import org.spongepowered.api.entity.living.player.tab.TabListEntry
 import org.spongepowered.api.item.inventory.ItemStack
 import org.spongepowered.api.item.inventory.entity.Hotbar
 import org.spongepowered.api.item.inventory.entity.MainPlayerInventory
 import org.spongepowered.api.item.inventory.equipment.EquipmentInventory
+import pw.dotdash.solace.java.unwrapped
 import pw.dotdash.solace.sponge.item.inventory.narrow
 
 inline val Player.mainInventory get() = this.inventory.narrow<MainPlayerInventory>()
@@ -21,3 +23,8 @@ inline infix fun Player.give(item: ItemStack) {
         this.mainInventory.offer(item)
     }
 }
+
+inline val Player.tabListEntry: TabListEntry? get() = this.tabList.getEntry(this.uniqueId).unwrapped
+
+inline val Player.prefix: String? get() = this.getOption("prefix").unwrapped
+inline val Player.suffix: String? get() = this.getOption("suffix").unwrapped
