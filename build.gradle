@@ -1,11 +1,15 @@
 plugins {
     id 'org.spongepowered.plugin' version '0.8.1'
     id "org.jetbrains.kotlin.jvm" version "1.2.50"
-    id 'com.github.johnrengelman.shadow' version '2.0.4'
 }
 
 group = pluginGroup
 version = pluginVersion
+
+configurations {
+    shade
+    compile.extendsFrom(shade)
+}
 
 repositories {
     mavenCentral()
@@ -13,8 +17,8 @@ repositories {
 
 dependencies {
     compile 'org.spongepowered:spongeapi:7.1.0-SNAPSHOT'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    compile "org.jetbrains.kotlin:kotlin-reflect"
+    shade "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.50"
+    shade "org.jetbrains.kotlin:kotlin-reflect:1.2.50"
 }
 
 sponge.plugin.id = pluginId
@@ -25,13 +29,8 @@ compileKotlin {
     }
 }
 
-shadowJar {
-    configurations = [project.configurations.compile]
-    classifier = "shaded"
-    version = pluginVersion
-
-    dependencies {
-        include(dependency('org.jetbrains.kotlin:kotlin-stdlib-jdk8'))
-        include(dependency('org.jetbrains.kotlin:kotlin-reflect'))
+jar {
+    configurations.shade.copyRecursive().setTransitive(true).each { artifact ->
+        from (zipTree(artifact))
     }
 }

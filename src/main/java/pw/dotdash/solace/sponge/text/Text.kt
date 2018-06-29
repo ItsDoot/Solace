@@ -102,3 +102,6 @@ inline fun Text.toJson(): String = TextSerializers.JSON.serialize(this)
 inline fun String.fromLegacy(): Text = TextSerializers.LEGACY_FORMATTING_CODE.deserialize(this)
 inline fun String.fromAmpersand(): Text = TextSerializers.FORMATTING_CODE.deserialize(this)
 inline fun String.fromJson(): Text = TextSerializers.JSON.deserialize(this)
+
+inline operator fun Text.plus(other: Text): Text = Text.builder().append(this).append(other).build()
+inline operator fun Text.plus(other: String): Text = Text.builder().append(this).append(other.text).build()

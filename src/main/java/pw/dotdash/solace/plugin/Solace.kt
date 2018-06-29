@@ -10,7 +10,7 @@ import pw.dotdash.solace.java.unwrapped
 import pw.dotdash.solace.sponge.container
 import pw.dotdash.solace.sponge.plugin.pluginContainer
 
-@Plugin(id = "solace", name = "Solace", version = "1.2.0",
+@Plugin(id = "solace", name = "Solace", version = "1.3.0",
         description = "A Kotlin extension library for use with Sponge.")
 class Solace {
 
