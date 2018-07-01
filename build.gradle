@@ -25,7 +25,7 @@ dependencies {
     shadow "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.50"
 }
 
-shadowJar{
+shadowJar {
     configurations = [project.configurations.shadow]
 
     relocate 'kotlin', 'solace.kotlin'
