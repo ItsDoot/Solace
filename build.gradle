@@ -1,36 +1,44 @@
 plugins {
-    id 'org.spongepowered.plugin' version '0.8.1'
     id "org.jetbrains.kotlin.jvm" version "1.2.50"
+    id "org.jetbrains.kotlin.kapt" version "1.2.50"
+
+    id "com.github.johnrengelman.shadow" version "2.0.4"
 }
 
 group = pluginGroup
 version = pluginVersion
 
 configurations {
-    shade
-    compile.extendsFrom(shade)
+    compile.extendsFrom(kapt)
+    compile.extendsFrom(shadow)
 }
 
 repositories {
     mavenCentral()
+    maven { url "https://repo.spongepowered.org/maven/" }
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {
-    compile 'org.spongepowered:spongeapi:7.1.0-SNAPSHOT'
-    shade "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.50"
-    shade "org.jetbrains.kotlin:kotlin-reflect:1.2.50"
+    kapt 'org.spongepowered:spongeapi:7.1.0-SNAPSHOT'
+
+    shadow "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.50"
 }
 
-sponge.plugin.id = pluginId
+shadowJar{
+    configurations = [project.configurations.shadow]
+
+    relocate 'kotlin', 'solace.kotlin'
+    relocate 'org.intellij.lang.annotations', 'solace.annotations.intellij'
+    relocate 'org.jetbrains.annotations', 'solace.annotations.jetbrains'
+
+    classifier = null
+}
+
+build.dependsOn(shadowJar)
 
 compileKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
-    }
-}
-
-jar {
-    configurations.shade.copyRecursive().setTransitive(true).each { artifact ->
-        from (zipTree(artifact))
     }
 }
