@@ -27,11 +27,11 @@ inline fun <T> CompletableFuture<T>.filterAsync(executor: Executor = ForkJoinExe
 inline fun <T, U> CompletableFuture<T>.and(other: CompletableFuture<U>): CompletableFuture<Pair<T, U>> =
         this.thenCombine(other) { t, u -> t to u }
 
-inline fun <T, U, R> CompletableFuture<T>.zip(other: CompletableFuture<U>, crossinline fn: (T, U) -> R): CompletableFuture<R> =
-        this.thenCombine(other) { t, u -> fn(t, u) }
-
 inline fun <T, U> CompletableFuture<T>.andAsync(other: CompletableFuture<U>, executor: Executor = ForkJoinExecutor): CompletableFuture<Pair<T, U>> =
         this.thenCombineAsync(other, java.util.function.BiFunction { t, u -> t to u }, executor)
+
+inline fun <T, U, R> CompletableFuture<T>.zip(other: CompletableFuture<U>, crossinline fn: (T, U) -> R): CompletableFuture<R> =
+        this.thenCombine(other) { t, u -> fn(t, u) }
 
 inline fun <T, U, R> CompletableFuture<T>.zipAsync(other: CompletableFuture<U>, executor: Executor = ForkJoinExecutor, crossinline fn: (T, U) -> R): CompletableFuture<R> =
         this.thenCombineAsync(other, java.util.function.BiFunction { t, u -> fn(t, u) }, executor)
@@ -47,10 +47,20 @@ inline fun <T> CompletableFuture<T>.onFulfilled(crossinline onFulfilled: (T) -> 
             onFulfilled(t)
         }
 
+inline fun <T> CompletableFuture<T>.onFulfilledAsync(executor: Executor = ForkJoinExecutor, crossinline onFulfilled: (T) -> Unit): CompletableFuture<T> =
+        this.whenCompleteAsync(java.util.function.BiConsumer { t, _ ->
+            onFulfilled(t)
+        }, executor)
+
 inline fun <T> CompletableFuture<T>.onRejected(crossinline onRejected: (Throwable) -> Unit): CompletableFuture<T> =
         this.whenComplete { _, throwable: Throwable? ->
             throwable?.let { onRejected(it.cause ?: it) }
         }
+
+inline fun <T> CompletableFuture<T>.onRejectedAsync(executor: Executor = ForkJoinExecutor, crossinline onRejected: (Throwable) -> Unit): CompletableFuture<T> =
+        this.whenCompleteAsync(java.util.function.BiConsumer { _, throwable: Throwable? ->
+            throwable?.let { onRejected(it.cause ?: it) }
+        }, executor)
 
 inline fun <T> CompletableFuture<T>.onComplete(crossinline onFulfilled: (T) -> Unit, crossinline onRejected: (Throwable) -> Unit): CompletableFuture<T> =
         this.whenComplete { t, throwable: Throwable? ->
@@ -60,16 +70,6 @@ inline fun <T> CompletableFuture<T>.onComplete(crossinline onFulfilled: (T) -> U
                 onRejected(throwable.cause ?: throwable)
             }
         }
-
-inline fun <T> CompletableFuture<T>.onFulfilledAsync(executor: Executor = ForkJoinExecutor, crossinline onFulfilled: (T) -> Unit): CompletableFuture<T> =
-        this.whenCompleteAsync(java.util.function.BiConsumer { t, _ ->
-            onFulfilled(t)
-        }, executor)
-
-inline fun <T> CompletableFuture<T>.onRejectedAsync(executor: Executor = ForkJoinExecutor, crossinline onRejected: (Throwable) -> Unit): CompletableFuture<T> =
-        this.whenCompleteAsync(java.util.function.BiConsumer { _, throwable: Throwable? ->
-            throwable?.let { onRejected(it.cause ?: it) }
-        }, executor)
 
 inline fun <T> CompletableFuture<T>.onCompleteAsync(executor: Executor = ForkJoinExecutor, crossinline onFulfilled: (T) -> Unit, crossinline onRejected: (Throwable) -> Unit): CompletableFuture<T> =
         this.whenCompleteAsync(java.util.function.BiConsumer { t, throwable: Throwable? ->
