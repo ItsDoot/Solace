@@ -11,7 +11,9 @@ import solace.sponge.container
 import solace.sponge.plugin.pluginContainer
 
 @Plugin(id = "solace", name = "Solace", version = "3.0.0",
-        description = "A Kotlin extension library for use with Sponge.")
+        description = "A Kotlin extension library for use with Sponge.",
+        url = "https://github.com/xDotDash/Solace",
+        authors = ["DotDash"])
 class Solace {
 
     @Inject
