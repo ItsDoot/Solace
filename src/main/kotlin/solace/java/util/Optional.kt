@@ -22,3 +22,6 @@ inline fun <reified T : Any, reified R : Any> Iterable<Optional<T>>.mapOptional(
 
 inline fun <reified T : Any, reified R : Any> Iterable<Optional<T>>.filterMapOptional(fn: (T) -> R): Iterable<R> =
         this.mapNotNull { it.unwrapped?.let(fn) }
+
+inline fun <reified T : Any, reified R : Any> Iterable<T>.filterFlatMap(fn: (T) -> Optional<R>): Iterable<R> =
+        this.mapNotNull { fn(it).unwrapped }
