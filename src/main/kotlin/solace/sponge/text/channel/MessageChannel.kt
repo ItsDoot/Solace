@@ -41,3 +41,6 @@ inline operator fun MessageChannel.contains(member: MessageReceiver): Boolean =
 
 inline operator fun MessageChannel.iterator(): Iterable<MessageReceiver> =
         this.members
+
+inline operator fun MessageChannel.plus(other: MessageChannel): MessageChannel =
+        MessageChannel.combined(this, other)
