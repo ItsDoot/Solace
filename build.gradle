@@ -1,6 +1,6 @@
 plugins {
-    id "org.jetbrains.kotlin.jvm" version "1.2.50"
-    id "org.jetbrains.kotlin.kapt" version "1.2.50"
+    id "org.jetbrains.kotlin.jvm" version "1.2.60"
+    id "org.jetbrains.kotlin.kapt" version "1.2.60"
 
     id "com.github.johnrengelman.shadow" version "2.0.4"
 }
@@ -22,8 +22,8 @@ repositories {
 dependencies {
     kapt 'org.spongepowered:spongeapi:7.1.0-SNAPSHOT'
 
-    shadow "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.50"
-    shadow "org.jetbrains.kotlin:kotlin-reflect:1.2.50"
+    shadow "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.60"
+    shadow "org.jetbrains.kotlin:kotlin-reflect:1.2.60"
 }
 
 shadowJar {
