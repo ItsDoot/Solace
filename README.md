@@ -61,3 +61,6 @@ compileKotlin {
     }
 }
 ```
+
+**NOTE:** We aren't actually using the shadow plugin to shade Kotlin.
+We are only using it to relocate references in our code, to use Solace's shaded Kotlin version.
