@@ -64,3 +64,16 @@ compileKotlin {
 
 **NOTE:** We aren't actually using the shadow plugin to shade Kotlin.
 We are only using it to relocate references in our code, to use Solace's shaded Kotlin version.
+
+#### Next:
+
+Simply add Solace as a dependency in your `@Plugin` like so:
+
+```kotlin
+@Plugin(id = "my-plugin", dependencies = [
+    Dependency(id = "solace", version = "3.4.0")
+])
+class MyPlugin
+```
+
+Finally, for Server Admins to use your plugin, they must now plop the Solace jar for your required version into the `mods`/`plugins` folder as well.
